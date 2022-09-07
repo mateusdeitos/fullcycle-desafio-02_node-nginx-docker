@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      ## especifica o diretorio onde está o DockerFile
+      context: ./src
+    container_name: app
+    ## dockerize é instalado no Dockerfile do node, serve para esperar o db subir para o app rodar
+    ## docker-entrypoint.sh é o arquivo que essa imagem do node executa
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    command: node index.js
+    networks:
+      - node-network
+    volumes:
+      - ./src:/usr/src/app
+    tty: true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0 
+    command: --init-file /data/application/init.sql
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./db/init.sql:/data/application/init.sql
+      - ./db/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node-network
+
+networks:
+  node-network:
+    driver: "bridge"
