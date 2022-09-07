@@ -11,5 +11,3 @@ Criar uma imagem docker rodando uma api node que salve dados em um banco mysql r
 ```bash
 docker compose up -d
 ```
-
-[Link da imagem no docker hub](https://hub.docker.com/repository/docker/md91/golang-fullcycle/general)
