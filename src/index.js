@@ -1,13 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
+const { dbConfig } = require('./db.config')
 const app = express();
-
-const dbConfig = {
-	host: 'db',
-	user: 'root',
-	password: 'root',
-	database: 'nodedb'
-};
 
 let connection = null;
 const getConnection = () => new Promise((resolve, reject) => {
@@ -61,11 +55,11 @@ const runQuery = (sql) => new Promise(async (resolve, reject) => {
 })
 
 const insertUser = async (name) => {
-	return runQuery(`INSERT INTO users (name) VALUES ('${name}')`);
+	return runQuery(`INSERT INTO people (name) VALUES ('${name}')`);
 }
 
 const listUsers = async () => {
-	return runQuery('SELECT * FROM users');
+	return runQuery('SELECT * FROM people');
 }
 
 app.get("/", async (req, res) => {
