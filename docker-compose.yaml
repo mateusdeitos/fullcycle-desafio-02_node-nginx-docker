@@ -3,7 +3,7 @@ services:
     container_name: nginx
     build: ./nginx
     ports:
-      - 80:80
+      - 8080:80
     networks:
       - node-network
     depends_on:
