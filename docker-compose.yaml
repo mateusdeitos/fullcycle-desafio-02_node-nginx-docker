@@ -13,11 +13,17 @@ services:
     container_name: app
     build: ./src
     entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    command: npm install
     command: node index.js
     networks:
       - node-network
     volumes:
       - ./src:/usr/src/app
+
+      # Isso garante que os módulos sejam instalados ao criar o container pela primeira vez
+      # E continue funcionando posteriormente, porém, ao instalar novas dependências
+      # é necessário recriar o container, não encontrei forma de sempre atualizar ao rodar
+      - /usr/src/app/node_modules
     tty: true
     depends_on:
       - db
